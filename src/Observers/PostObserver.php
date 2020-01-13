@@ -9,12 +9,35 @@
 namespace Larva\Circle\Observers;
 
 
+use Larva\Circle\Models\Circle;
+use Larva\Circle\Models\Post;
+
 /**
- * Class PostObserver
+ * 帖子观察者
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */
 class PostObserver
 {
+    /**
+     * Handle the member "created" event.
+     *
+     * @param Post $post
+     * @return void
+     */
+    public function created(Post $post)
+    {
+        Circle::query()->where('id',$post->circle_id)->increment('post_count');
+    }
 
+    /**
+     * Handle the member "deleted" event.
+     *
+     * @param Post $post
+     * @return void
+     */
+    public function deleted(Post $post)
+    {
+        Circle::query()->where('id',$post->circle_id)->decrement('post_count');
+    }
 }

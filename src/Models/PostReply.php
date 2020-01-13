@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
  * @property int $id
  * @property int $user_id
  * @property int $circle_id
+ * @property int $post_id
  * @property int $views 查看数
  * @property string $content 回复内容
  * @property \Illuminate\Support\Carbon $created_at

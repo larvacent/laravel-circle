@@ -8,13 +8,35 @@
 
 namespace Larva\Circle\Observers;
 
+use Larva\Circle\Models\Post;
+use Larva\Circle\Models\PostReply;
 
 /**
- * Class PostReplyObserver
+ * 帖子回复观察者
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */
 class PostReplyObserver
 {
+    /**
+     * Handle the member "created" event.
+     *
+     * @param PostReply $postReply
+     * @return void
+     */
+    public function created(PostReply $postReply)
+    {
+        Post::query()->where('id',$postReply->post_id)->increment('reply_count');
+    }
 
+    /**
+     * Handle the member "deleted" event.
+     *
+     * @param PostReply $postReply
+     * @return void
+     */
+    public function deleted(PostReply $postReply)
+    {
+        Post::query()->where('id',$postReply->post_id)->decrement('reply_count');
+    }
 }
