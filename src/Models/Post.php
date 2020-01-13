@@ -118,4 +118,16 @@ class Post extends Model
             return static::findById($id);
         });
     }
+
+    /**
+     * 通过ID获取内容
+     * @param int $id
+     * @return Post|null
+     */
+    public static function findById($id)
+    {
+        return Cache::store('file')->rememberForever('circle:posts:' . $id, function () use ($id) {
+            return static::find($id);
+        });
+    }
 }

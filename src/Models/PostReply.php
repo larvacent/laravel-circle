@@ -9,6 +9,7 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * 帖子回复
@@ -47,6 +48,18 @@ class PostReply extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * 通过ID获取内容
+     * @param int $id
+     * @return PostReply|null
+     */
+    public static function findById($id)
+    {
+        return Cache::store('file')->rememberForever('circle:post:replies:' . $id, function () use ($id) {
+            return static::find($id);
+        });
+    }
 
     /**
      * Get the circle that the charge belongs to.

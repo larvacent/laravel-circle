@@ -9,6 +9,7 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * 圈子内成员
@@ -47,6 +48,18 @@ class Member extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * 通过ID获取内容
+     * @param int $id
+     * @return Member|null
+     */
+    public static function findById($id)
+    {
+        return Cache::store('file')->rememberForever('circle:members:' . $id, function () use ($id) {
+            return static::find($id);
+        });
+    }
 
     /**
      * Get the user that the charge belongs to.

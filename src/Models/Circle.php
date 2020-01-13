@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Cache;
  * @property int $member_count
  * @property int $post_count
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|Circle recommend()
+ *
  * @author Tongle Xu <xutongle@gmail.com>
  */
 class Circle extends Model
@@ -38,7 +40,7 @@ class Circle extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'cover_path', 'introduction', 'member_count', 'post_count'
+        'user_id', 'name', 'cover_path', 'introduction', 'recommend', 'member_count', 'post_count'
     ];
 
     /**
@@ -89,6 +91,43 @@ class Circle extends Model
     public function members()
     {
         return $this->hasMany(Member::class);
+    }
+
+    /**
+     * 查询推荐的
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRecommend($query)
+    {
+        return $query->where('recommend', '=', true);
+    }
+
+    /**
+     * 通过ID获取内容
+     * @param int $id
+     * @return Circle|null
+     */
+    public static function findById($id)
+    {
+        return Cache::store('file')->rememberForever('circles:' . $id, function () use ($id) {
+            return static::find($id);
+        });
+    }
+
+    /**
+     * 获取推荐帖子
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public static function recommended($limit = 10)
+    {
+        $ids = Cache::store('file')->remember('circles:recommended:ids', now()->addMinutes(60), function () use ($limit) {
+            return static::recommend()->orderByDesc('id')->orderByDesc('created_at')->limit($limit)->pluck('id');
+        });
+        return $ids->map(function ($id) {
+            return static::findById($id);
+        });
     }
 
     /**
