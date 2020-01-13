@@ -7,11 +7,10 @@
  */
 namespace Larva\Circle;
 
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class CircleServiceProvider
+ * 圈子服务提供者
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */
@@ -35,9 +34,13 @@ class CircleServiceProvider extends ServiceProvider
         }
 
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'circle');
-        //$this->loadViewsFrom(__DIR__.'/../resources/views', 'circle');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'circle');
 
-
+        // Observers
+        \Larva\Circle\Models\Circle::observe(\Larva\Circle\Observers\CircleObserver::class);
+        \Larva\Circle\Models\Member::observe(\Larva\Circle\Observers\MemberObserver::class);
+        \Larva\Circle\Models\Post::observe(\Larva\Circle\Observers\PostObserver::class);
+        \Larva\Circle\Models\PostReply::observe(\Larva\Circle\Observers\PostReplyObserver::class);
     }
 
     /**

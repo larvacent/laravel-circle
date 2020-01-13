@@ -12,6 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * 帖子回复
+ * @property int $id
+ * @property int $user_id
+ * @property int $circle_id
+ * @property int $views 查看数
+ * @property string $content 回复内容
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */
@@ -30,7 +35,7 @@ class PostReply extends Model
      * @var array
      */
     protected $fillable = [
-        'circle_id', 'post_id', 'user_id'
+        'circle_id', 'post_id', 'user_id', 'views', 'content'
     ];
 
     /**
