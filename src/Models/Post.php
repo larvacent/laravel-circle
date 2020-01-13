@@ -22,7 +22,7 @@ class Post extends Model
      *
      * @var string
      */
-    protected $table = 'posts';
+    protected $table = 'circle_posts';
 
     /**
      * 可以批量赋值的属性
@@ -30,7 +30,7 @@ class Post extends Model
      * @var array
      */
     protected $fillable = [
-        'circle_id', 'user_id'
+        'circle_id', 'user_id', 'replied_at'
     ];
 
     /**
@@ -41,6 +41,7 @@ class Post extends Model
     protected $dates = [
         'created_at',
         'updated_at',
+        'replied_at'
     ];
 
     /**
@@ -63,5 +64,14 @@ class Post extends Model
     public function circle()
     {
         return $this->belongsTo(Circle::class);
+    }
+
+    /**
+     * 帖子回复关系
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function replies()
+    {
+        return $this->hasMany(PostReply::class);
     }
 }

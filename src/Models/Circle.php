@@ -12,6 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * 圈子
+ * @property int $id
+ * @property int $user_id
+ * @property string $user
+ * @property string $cover_path
+ * @property string $introduction
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */
@@ -30,7 +35,7 @@ class Circle extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name'
+        'user_id', 'name', 'cover_path', 'introduction'
     ];
 
     /**

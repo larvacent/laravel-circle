@@ -11,18 +11,18 @@ namespace Larva\Circle\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 圈子内成员
+ * 帖子回复
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */
-class Member extends Model
+class PostReply extends Model
 {
     /**
      * 与模型关联的数据表。
      *
      * @var string
      */
-    protected $table = 'circle_members';
+    protected $table = 'circle_post_replies';
 
     /**
      * 可以批量赋值的属性
@@ -30,7 +30,7 @@ class Member extends Model
      * @var array
      */
     protected $fillable = [
-        'circle_id', 'user_id'
+        'circle_id', 'post_id', 'user_id'
     ];
 
     /**
@@ -42,26 +42,4 @@ class Member extends Model
         'created_at',
         'updated_at',
     ];
-
-    /**
-     * Get the user that the charge belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo(
-            config('auth.providers.' . config('auth.guards.api.provider') . '.model')
-        );
-    }
-
-    /**
-     * Get the circle that the charge belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function circle()
-    {
-        return $this->belongsTo(Circle::class);
-    }
 }
