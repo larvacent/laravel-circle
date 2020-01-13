@@ -20,7 +20,7 @@ use Larva\Circle\Models\Post;
 class PostObserver
 {
     /**
-     * Handle the member "created" event.
+     * Handle the post "created" event.
      *
      * @param Post $post
      * @return void
@@ -31,7 +31,7 @@ class PostObserver
     }
 
     /**
-     * Handle the member "deleted" event.
+     * Handle the post "deleted" event.
      *
      * @param Post $post
      * @return void

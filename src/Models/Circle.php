@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Cache;
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
+ * @property Post[] $posts
+ * @property Member[] $members
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Circle recommend()
  *
  * @author Tongle Xu <xutongle@gmail.com>

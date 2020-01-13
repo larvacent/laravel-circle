@@ -8,6 +8,7 @@
 
 namespace Larva\Circle\Observers;
 
+use Larva\Circle\Models\Member;
 use Larva\Circle\Models\Post;
 use Larva\Circle\Models\PostReply;
 
@@ -19,24 +20,29 @@ use Larva\Circle\Models\PostReply;
 class PostReplyObserver
 {
     /**
-     * Handle the member "created" event.
+     * Handle the reply "created" event.
      *
      * @param PostReply $postReply
      * @return void
      */
     public function created(PostReply $postReply)
     {
-        Post::query()->where('id',$postReply->post_id)->increment('reply_count');
+        Member::query()->where('circle_id', $postReply->circle_id)
+            ->where('user_id',$postReply->user_id)
+            ->update(['active_at' => $postReply->freshTimestamp()]);
+        Post::query()->where('id', $postReply->post_id)
+            ->where('circle_id', $postReply->circle_id)
+            ->increment('reply_count', 1, ['replied_at' => $postReply->freshTimestamp()]);
     }
 
     /**
-     * Handle the member "deleted" event.
+     * Handle the reply "deleted" event.
      *
      * @param PostReply $postReply
      * @return void
      */
     public function deleted(PostReply $postReply)
     {
-        Post::query()->where('id',$postReply->post_id)->decrement('reply_count');
+        Post::query()->where('id', $postReply->post_id)->decrement('reply_count');
     }
 }

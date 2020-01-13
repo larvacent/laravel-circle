@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Cache;
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  *
+ * @property Post $post
+ * @property Circle $circle
+ *
  * @author Tongle Xu <xutongle@gmail.com>
  */
 class PostReply extends Model

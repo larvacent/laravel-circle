@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Cache;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $replied_at
  *
+ * @property Circle $circle
+ * @property PostReply[] $postReplies
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Post recommend()
  *
  * @author Tongle Xu <xutongle@gmail.com>

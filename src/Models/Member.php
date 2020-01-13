@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Cache;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $active_at
  *
+ * @property Circle $circle
+ * @property Post[] $posts
  * @author Tongle Xu <xutongle@gmail.com>
  */
 class Member extends Model
