@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Cache;
  * @property string $introduction
  * @property int $member_count
  * @property int $post_count
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Circle recommend()
  *

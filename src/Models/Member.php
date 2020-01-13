@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Cache;
  * @property int $user_id
  * @property int $post_count
  * @property int $reply_count
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $active_at
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */

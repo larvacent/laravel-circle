@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Cache;
  * @property boolean $recommend 推荐
  * @property int $views 查看数
  * @property int $reply_count 回复数
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $replied_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Post recommend()
  *

@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Cache;
  * @property int $circle_id
  * @property int $views 查看数
  * @property string $content 回复内容
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */
