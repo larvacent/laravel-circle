@@ -35,7 +35,7 @@ class PostReply extends Model
      * @var array
      */
     protected $fillable = [
-        'circle_id', 'post_id', 'user_id', 'views', 'content'
+        'circle_id', 'post_id', 'user_id', 'content'
     ];
 
     /**

@@ -9,6 +9,7 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * 圈子
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $user
  * @property string $cover_path
  * @property string $introduction
+ * @property int $member_count
+ * @property int $post_count
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */
@@ -35,7 +38,7 @@ class Circle extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'cover_path', 'introduction'
+        'user_id', 'name', 'cover_path', 'introduction', 'member_count', 'post_count'
     ];
 
     /**
@@ -46,6 +49,16 @@ class Circle extends Model
     protected $dates = [
         'created_at',
         'updated_at',
+    ];
+
+    /**
+     * 模型的默认属性值。
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'member_count' => 0,
+        'post_count' => 0,
     ];
 
     /**
@@ -76,5 +89,20 @@ class Circle extends Model
     public function members()
     {
         return $this->hasMany(Member::class);
+    }
+
+    /**
+     * 获取活跃会员
+     * @param int $limit
+     * @return mixed
+     */
+    public function activeMembers($limit = 5)
+    {
+        $ids = Cache::store('file')->remember('circles:activeMembers:ids', now()->addMinutes(15), function () use ($limit) {
+            return static::members()->orderByDesc('active_at')->limit($limit)->pluck('id');
+        });
+        return $ids->map(function ($id) {
+            return static::findById($id);
+        });
     }
 }

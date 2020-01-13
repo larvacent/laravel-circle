@@ -12,6 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * 圈子内成员
+ * @property int $id
+ * @property int $circle_id
+ * @property int $user_id
+ * @property int $post_count
+ * @property int $reply_count
  *
  * @author Tongle Xu <xutongle@gmail.com>
  */
@@ -30,7 +35,7 @@ class Member extends Model
      * @var array
      */
     protected $fillable = [
-        'circle_id', 'user_id'
+        'circle_id', 'user_id', 'post_count', 'reply_count', 'active_at'
     ];
 
     /**
@@ -64,4 +69,14 @@ class Member extends Model
     {
         return $this->belongsTo(Circle::class);
     }
+
+    /**
+     * 获取帖子关系
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
 }

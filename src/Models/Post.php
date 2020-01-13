@@ -9,13 +9,14 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * 圈子内帖子
  * @property int $id
  * @property int $user_id
  * @property int $circle_id
- * @property boolean $recommend
+ * @property boolean $recommend 推荐
  * @property int $views 查看数
  * @property int $reply_count 回复数
  *
@@ -51,6 +52,16 @@ class Post extends Model
     ];
 
     /**
+     * 模型的默认属性值。
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'views' => 0,
+        'reply_count' => 0,
+    ];
+
+    /**
      * Get the user that the charge belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -79,5 +90,20 @@ class Post extends Model
     public function replies()
     {
         return $this->hasMany(PostReply::class);
+    }
+
+    /**
+     * 获取推荐帖子
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public static function recommended($limit = 10)
+    {
+        $ids = Cache::store('file')->remember('circle:posts:recommended:ids', now()->addMinutes(60), function () use ($limit) {
+            return static::where('recommend',true)->orderByDesc('id')->orderByDesc('created_at')->limit($limit)->pluck('id');
+        });
+        return $ids->map(function ($id) {
+            return static::findById($id);
+        });
     }
 }
