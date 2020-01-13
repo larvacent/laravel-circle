@@ -1,0 +1,27 @@
+{
+  "name": "larva/laravel-circle",
+  "description": "This is a circle.",
+  "keywords": [ "laravel", "circle", "larva" ],
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "illuminate/support": "^5.1 || ^6.0",
+    "illuminate/notifications": "^5.1 || ^6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Larva\\Circle\\": "src"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    },
+    "laravel": {
+      "providers": [
+        "Larva\\Circle\\CircleServiceProvider"
+      ]
+    }
+  },
+  "prefer-stable": true
+}
