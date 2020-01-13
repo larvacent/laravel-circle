@@ -42,4 +42,24 @@ class PostReply extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * Get the circle that the charge belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function circle()
+    {
+        return $this->belongsTo(Circle::class);
+    }
+
+    /**
+     * Get the post that the charge belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }
