@@ -1,6 +1,6 @@
 {
   "name": "larva/laravel-circle",
-  "description": "This is a circle.",
+  "description": "This is a circle module.",
   "keywords": [ "laravel", "circle", "larva" ],
   "type": "library",
   "license": "MIT",

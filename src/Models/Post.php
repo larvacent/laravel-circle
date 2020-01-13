@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Cache;
  * @property int $views 查看数
  * @property int $reply_count 回复数
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|Post recommend()
+ *
  * @author Tongle Xu <xutongle@gmail.com>
  */
 class Post extends Model
@@ -93,6 +95,16 @@ class Post extends Model
     }
 
     /**
+     * 查询推荐的
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRecommend($query)
+    {
+        return $query->where('recommend', '=', true);
+    }
+
+    /**
      * 获取推荐帖子
      * @param int $limit
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
@@ -100,7 +112,7 @@ class Post extends Model
     public static function recommended($limit = 10)
     {
         $ids = Cache::store('file')->remember('circle:posts:recommended:ids', now()->addMinutes(60), function () use ($limit) {
-            return static::where('recommend',true)->orderByDesc('id')->orderByDesc('created_at')->limit($limit)->pluck('id');
+            return static::recommend()->orderByDesc('id')->orderByDesc('created_at')->limit($limit)->pluck('id');
         });
         return $ids->map(function ($id) {
             return static::findById($id);
