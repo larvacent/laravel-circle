@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Cache;
  * @property int $id
  * @property int $user_id
  * @property int $circle_id
+ * @property string $title
+ * @property string $content
  * @property boolean $recommend 推荐
  * @property int $views 查看数
  * @property int $reply_count 回复数
@@ -46,7 +48,7 @@ class Post extends Model
      * @var array
      */
     protected $fillable = [
-        'circle_id', 'user_id', 'recommend', 'views', 'reply_count', 'replied_at'
+        'circle_id', 'user_id', 'recommend', 'title', 'content', 'views', 'reply_count', 'replied_at'
     ];
 
     /**
