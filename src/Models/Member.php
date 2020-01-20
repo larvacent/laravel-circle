@@ -9,6 +9,7 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -53,6 +54,21 @@ class Member extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function ($model) {
+            if (empty($model->getAttribute('user_id')) && Auth::guard()->check()) {
+                $model->setAttribute('user_id', Auth::id());
+            }
+        });
+    }
 
     /**
      * 通过ID获取内容

@@ -8,7 +8,6 @@
 
 namespace Larva\Circle\Observers;
 
-
 use Larva\Circle\Models\Circle;
 use Larva\Circle\Models\Member;
 

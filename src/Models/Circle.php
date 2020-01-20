@@ -9,6 +9,7 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -69,6 +70,21 @@ class Circle extends Model
     ];
 
     /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function ($model) {
+            if (empty($model->getAttribute('user_id')) && Auth::guard()->check()) {
+                $model->setAttribute('user_id', Auth::id());
+            }
+        });
+    }
+
+    /**
      * Get the user that the charge belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -99,7 +115,7 @@ class Circle extends Model
     }
 
     /**
-     * 查询推荐的
+     * 查询推荐的圈子
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -125,9 +141,9 @@ class Circle extends Model
      * @param int $limit
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public static function recommended($limit = 10)
+    public static function recommended($limit = 10, $minutes = 60)
     {
-        $ids = Cache::store('file')->remember('circles:recommended:ids', now()->addMinutes(60), function () use ($limit) {
+        $ids = Cache::store('file')->remember('circles:recommended:' . $limit, \Illuminate\Support\Carbon::now()->addMinutes($minutes), function () use ($limit) {
             return static::recommend()->orderByDesc('id')->orderByDesc('created_at')->limit($limit)->pluck('id');
         });
         return $ids->map(function ($id) {
@@ -138,11 +154,12 @@ class Circle extends Model
     /**
      * 获取活跃会员
      * @param int $limit
+     * @param int $minutes
      * @return mixed
      */
-    public function activeMembers($limit = 5)
+    public function activeMembers($limit = 5, $minutes = 15)
     {
-        $ids = Cache::store('file')->remember('circles:activeMembers:ids', now()->addMinutes(15), function () use ($limit) {
+        $ids = Cache::store('file')->remember('circles:activeMembers:' . $limit, \Illuminate\Support\Carbon::now()->addMinutes($minutes), function () use ($limit) {
             return static::members()->orderByDesc('active_at')->limit($limit)->pluck('id');
         });
         return $ids->map(function ($id) {

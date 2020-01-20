@@ -9,6 +9,7 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -70,6 +71,21 @@ class Post extends Model
     ];
 
     /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function ($model) {
+            if (empty($model->getAttribute('user_id')) && Auth::guard()->check()) {
+                $model->setAttribute('user_id', Auth::id());
+            }
+        });
+    }
+
+    /**
      * Get the user that the charge belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -113,11 +129,12 @@ class Post extends Model
     /**
      * 获取推荐帖子
      * @param int $limit
+     * @param int $minutes
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public static function recommended($limit = 10)
+    public static function recommended($limit = 10, $minutes = 60)
     {
-        $ids = Cache::store('file')->remember('circle:posts:recommended:ids', now()->addMinutes(60), function () use ($limit) {
+        $ids = Cache::store('file')->remember('circle:posts:recommended:' . $limit, \Illuminate\Support\Carbon::now()->addMinutes($minutes), function () use ($limit) {
             return static::recommend()->orderByDesc('id')->orderByDesc('created_at')->limit($limit)->pluck('id');
         });
         return $ids->map(function ($id) {
