@@ -1,6 +1,6 @@
 # laravel-circle
 
-Laravel 圈子
+Laravel 圈子，类似百度贴吧或者迅雷电影圈子
 
 ## 环境需求
 

@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Cache;
  *
  * @property Post[] $posts
  * @property Member[] $members
+ * @property User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Circle recommend()
  *
@@ -139,6 +140,7 @@ class Circle extends Model
     /**
      * 获取推荐帖子
      * @param int $limit
+     * @param int $minutes
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public static function recommended($limit = 10, $minutes = 60)
