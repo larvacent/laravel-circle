@@ -9,8 +9,8 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Larva\User\Traits\BelongsToUserTrait;
 
 /**
  * 圈子内成员
@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Cache;
  */
 class Member extends Model
 {
+    use BelongsToUserTrait;
+
     /**
      * 与模型关联的数据表。
      *
@@ -56,21 +58,6 @@ class Member extends Model
     ];
 
     /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-        static::saving(function ($model) {
-            if (empty($model->getAttribute('user_id')) && Auth::guard()->check()) {
-                $model->setAttribute('user_id', Auth::id());
-            }
-        });
-    }
-
-    /**
      * 通过ID获取内容
      * @param int $id
      * @return Member|null
@@ -80,18 +67,6 @@ class Member extends Model
         return Cache::store('file')->rememberForever('circle:members:' . $id, function () use ($id) {
             return static::find($id);
         });
-    }
-
-    /**
-     * Get the user that the charge belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo(
-            config('auth.providers.' . config('auth.guards.api.provider') . '.model')
-        );
     }
 
     /**

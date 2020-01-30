@@ -9,14 +9,14 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Larva\User\Models\User;
+use Larva\User\Traits\BelongsToUserTrait;
 
 /**
  * 圈子
  * @property int $id
  * @property int $user_id
- * @property string $user
  * @property string $cover_path
  * @property string $introduction
  * @property int $member_count
@@ -34,6 +34,8 @@ use Illuminate\Support\Facades\Cache;
  */
 class Circle extends Model
 {
+    use BelongsToUserTrait;
+
     /**
      * 与模型关联的数据表。
      *
@@ -69,33 +71,6 @@ class Circle extends Model
         'member_count' => 0,
         'post_count' => 0,
     ];
-
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-        static::saving(function ($model) {
-            if (empty($model->getAttribute('user_id')) && Auth::guard()->check()) {
-                $model->setAttribute('user_id', Auth::id());
-            }
-        });
-    }
-
-    /**
-     * Get the user that the charge belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo(
-            config('auth.providers.' . config('auth.guards.api.provider') . '.model')
-        );
-    }
 
     /**
      * 圈内帖子关系

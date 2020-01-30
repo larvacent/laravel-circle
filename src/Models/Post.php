@@ -9,8 +9,8 @@
 namespace Larva\Circle\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Larva\User\Traits\BelongsToUserTrait;
 
 /**
  * 圈子内帖子
@@ -35,6 +35,8 @@ use Illuminate\Support\Facades\Cache;
  */
 class Post extends Model
 {
+    use BelongsToUserTrait;
+
     /**
      * 与模型关联的数据表。
      *
@@ -71,33 +73,6 @@ class Post extends Model
         'views' => 0,
         'reply_count' => 0,
     ];
-
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-        static::saving(function ($model) {
-            if (empty($model->getAttribute('user_id')) && Auth::guard()->check()) {
-                $model->setAttribute('user_id', Auth::id());
-            }
-        });
-    }
-
-    /**
-     * Get the user that the charge belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo(
-            config('auth.providers.' . config('auth.guards.api.provider') . '.model')
-        );
-    }
 
     /**
      * Get the circle that the charge belongs to.
